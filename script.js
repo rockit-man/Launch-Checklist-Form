@@ -13,7 +13,6 @@ window.addEventListener("load", () => {
       const fuelLevelInput = document.querySelector("input[name=fuelLevel]").value;
       const cargoMassInput = document.querySelector("input[name=cargoMass]").value
 
-      
       let pilotStatus = document.getElementById("pilotStatus");
       let copilotStatus = document.getElementById("copilotStatus");
       let fuelStatus = document.getElementById("fuelStatus");
@@ -28,12 +27,6 @@ window.addEventListener("load", () => {
          || cargoMassInput === "") {
          alert("All fields are required!");
       }
-
-      if (isNaN(fuelLevelInput) || isNaN(cargoMassInput)) {
-         alert("Both 'Fuel Level' & 'Cargo Mass' must be a number or string of numbers containing only digits from 0-9.");
-         launchStatus.innerHTML = "Shuttle not ready for launch"
-         launchStatus.style.color = "red"
-      } 
       
       if (!isNaN(pilotNameInput) || !isNaN(copilotNameInput)) {
          alert("'Pilot' or 'Co-pilot' name entry is invalid. Please validate entry is a string of letters.");
@@ -42,6 +35,12 @@ window.addEventListener("load", () => {
          launchStatus.innerHTML = "Shuttle not ready for launch"
          launchStatus.style.color = "red"
       }
+
+      if (isNaN(fuelLevelInput) || isNaN(cargoMassInput)) {
+         alert("Both 'Fuel Level' & 'Cargo Mass' must be a number or string of numbers containing only digits from 0-9.");
+         launchStatus.innerHTML = "Shuttle not ready for launch"
+         launchStatus.style.color = "red"
+      } 
       
       if (Number(fuelLevelInput) < 10000) {
          fuelStatus.innerHTML = "There isn't enough fuel for the journey"
@@ -67,8 +66,24 @@ window.addEventListener("load", () => {
          launchStatus.style.color = "green"
       }
 
+      let missionTarget = document.getElementById("missionTarget")
 
-
+      fetch("https://handlers.education.launchcode.org/static/planets.json").then((response) => {
+         response.json().then((json) => {
+            console.log(json);
+            let index = 1;
+            missionTarget.innerHTML = `<h2>Mission Destination</h2>
+               <ol>
+                  <li>Name: ${json[index].name}</li>
+                  <li>Diameter: ${json[index].diameter}</li>
+                  <li>Star: ${json[index].star}</li>
+                  <li>Distance from Earth: ${json[index].distance}</li>
+                  <li>Number of Moons: ${json[index].moons}</li>      
+               </ol>
+               <img src="${json[index].image}">
+               `;
+         });
+      });
    });
 });
 
